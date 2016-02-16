@@ -117,9 +117,9 @@ int main(int argc, char * argv[])
     std::string nome = dataFileName.substr(0, dataFileName.length() - 4);    
     ifstream stream;
     stream.open(dataFileName.c_str());
-    int day_t;
+    double day_t;
     std::string file_t;
-    std::vector<int> daysFromCalibration;
+    std::vector<double> daysFromCalibration;
     std::vector<std::string> dataFiles;
     while(!stream.eof())
     {

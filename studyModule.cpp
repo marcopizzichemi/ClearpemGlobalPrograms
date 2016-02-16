@@ -180,6 +180,7 @@ int main(int argc, char * argv[])
     // construct graphs and maps accordingly
     // crystals out of window
     int *outCry[2];
+    double *sigmaTime[2];
     
     TH2F **outMap[2];
     TCanvas **C_outMap[2];
@@ -187,6 +188,7 @@ int main(int argc, char * argv[])
     for(int i = 0; i < 2 ; i++) 
     {
       outCry[i] = new int[Npoints];
+      sigmaTime[i] = new double[Npoints];
       
       outMap[i] = new TH2F*[Npoints];
       C_outMap[i] = new TCanvas*[Npoints];
@@ -206,6 +208,7 @@ int main(int argc, char * argv[])
 	C_outMap[i][j] = new TCanvas(mapName.str().c_str(),mapName.str().c_str(),1200,800);
 // 	xvect[i][j] = 0;
 	outCry[i][j] = 0;
+	sigmaTime[i][j] = 0;
       }
     }
     
@@ -219,7 +222,7 @@ int main(int argc, char * argv[])
 	{
 	  //feedback to the user 
 	  std::cout << "Head " << std::setw(2) <<  head << "/1" << "\t" << "x " << std::setw(2) << xCry << "/63" << "\t\t" << "y " << std::setw(2) << yCry << "/47"/*<< "\t" << " Subplot " << k*/;
-	  std::cout << "\r";
+	  std::cout << "\n";
 	  spectraFile->cd();
 	  spectraFile->cd(directories[head][xCry][yCry].c_str());
 	  TGraphErrors *graph = (TGraphErrors*)gDirectory->Get("Graph");
@@ -240,11 +243,13 @@ int main(int argc, char * argv[])
 		outMap[head][t]->Fill(xCry,yCry,0);
 	      }
 	    }
+	    
+	    
+	    
 	  }
 	}
       }
     }
-    
     for(int i = 0; i < 2 ; i++) 
     {
       for (int j = 0; j < Npoints ; j++)
@@ -258,7 +263,7 @@ int main(int argc, char * argv[])
 // 	C_outMap[i][j]->Print(gifName.str().c_str());
       }
     }
-    
+   
     TGraph *inTime[2];
     TCanvas *C_inTime[2];
     for(int head = 0; head < 2; head++)
@@ -275,6 +280,8 @@ int main(int argc, char * argv[])
       inTime[head]->Draw("AP");
     }
     
+
+    
     std::stringstream title;
     title << "module_head" << userHead << "_x" << userXmin << "-"<< userXmax << "_y"<< userYmin << "-" << userYmax ;
     
@@ -284,13 +291,17 @@ int main(int argc, char * argv[])
     plot2d->GetXaxis()->SetRangeUser(0, 64);
     plot2d->GetYaxis()->SetRangeUser(0, 48);
     globalMap->Write();
+    
+
     plot2d->GetXaxis()->SetRangeUser(userXmin, userXmax);
     plot2d->GetYaxis()->SetRangeUser(userYmin, userYmax);
     zoomMap->Write();
+    
     C_inTime[0]->Write();
     C_inTime[1]->Write();
     inTime[0]->Write();
     inTime[1]->Write();
+    
     for(int i = 0; i < 2 ; i++) 
     {
       for (int j = 0; j < Npoints ; j++)
@@ -298,9 +309,12 @@ int main(int argc, char * argv[])
 	C_outMap[i][j]->Write();
       }
     }
+
     multi->Write();
+//     spectraFile->Close();
     multiFile->Close();
-    
+
     return 0;
+
   }
 }

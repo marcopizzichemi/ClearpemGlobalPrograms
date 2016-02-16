@@ -4,7 +4,7 @@
 // at the same time avoiding repetitions 
 
 // compile with
-// g++ -o plotsFromImage plotsFromImage.cpp `root-config --cflags --glibs` -lSpectrum
+// g++ -o ../build/plotsFromImage plotsFromImage.cpp `root-config --cflags --glibs` -lSpectrum
 
 // run with
 // plotsFromImage data.elm2 [totalTime] [singleFrameTime]
@@ -77,6 +77,7 @@ int main(int argc, char * argv[])
     std::cout << "file.elm2 \t\t input .elm2 file" << std::endl;
     std::cout << "totalTime \t\t total acq time in sec (OPTIONAL, by default is 30min)" << std::endl;
     std::cout << "singleFrameTime \t time length of single frama in sec (OPTIONAL, by default is 5min)" << std::endl;
+    std::cout << "halfLife \t Half life of the isotope in SECONDS (OPTIONAL, by default it's 18F-FDG -> 109min)" << std::endl;
     std::cout << std::endl;
     std::cout << "Spectra will be stored in a file spectra_file.root" << std::endl;
     std::cout << std::endl;
@@ -100,11 +101,14 @@ int main(int argc, char * argv[])
     // get time frames if input, otherwise stick to default
     int totalTime = 1800; // by default, 30 min 
     int singleFrameTime = 300; // by default, 5 min
+    double tau = (109.8*60.0/log(2));  // FDG half life in sec
     if(argc > 2)
     {
       totalTime = atoi(argv[2]);
       singleFrameTime = atoi(argv[3]);
     }   
+    if(argc > 4)
+      tau = (atof(argv[4])*60.0/log(2));
     
     //---- inizialize some variable
     gErrorIgnoreLevel = kError;
@@ -146,7 +150,7 @@ int main(int argc, char * argv[])
     
     //group of histos, filled with different time frames to compensate for fdg decay
     //---- compute the time intervals to get "stable" statistics
-    double tau = (109.8*60.0/log(2));  // FDG half life in sec
+    //tau = 60000000; // fix for no different time frame
     double presentTime = 0;
     double presentFrame = singleFrameTime;
     std::vector<double> xTime;
@@ -174,6 +178,7 @@ int main(int argc, char * argv[])
 //     }
     
     TH1F **spectraSplitTimeWeighted[2][64][48];
+
     for(int head = 0; head < 2; head++) for(int xCry = 0; xCry < 64; xCry++) for(int yCry = 0; yCry < 48; yCry++) 
     {
       spectraSplitTimeWeighted[head][xCry][yCry]= new TH1F*[xTimeI.size()-1];
@@ -244,6 +249,8 @@ int main(int argc, char * argv[])
     {
       if(t0 == -1) t0 = fe.ts; 		//t0 is effectively calculated only at the first cycle
       tf = fe.ts;
+      
+//       if((tf - t0) < 5400) continue; // to cut the first 5400 seconds of the dataset
       
       if(nEvents == 0)
 	printf("distance = %f\n",fe.d);
