@@ -62,8 +62,8 @@ int main(int argc, char * argv[])
 	int lx = nx * pxSize;
 	int ny = (ySize)/pxSize;
 	int ly = ny * pxSize;
-	
-	
+	double totalTime = 0;
+	double t0 = -1;
 	
 // 	TFile *f = new TFile(argv[1], "RECREATE");
 // 	TH2F *h = new TH2F("projection", "projection", nx, -lx/2, lx/2, ny, -ny/2, ny/2);
@@ -119,7 +119,9 @@ int main(int argc, char * argv[])
 			float v = fe.y1 - fe.y2;
 			float w = fe.z1 - fe.z2;
 		
-
+			if(t0 == -1)
+			  t0 = fe.ts;
+			totalTime = fe.ts - t0;
 			if(fabs(w) < fe.d/2.0) {
 				nBad++;
 				continue;
@@ -223,6 +225,7 @@ int main(int argc, char * argv[])
 	
 	
 	printf("%lld Total Events\n", nEvents);
+	printf("%lf Total Time\n", totalTime);
 	printf("%lld Prompts\n", nTrues);
 	printf("%.0lf Randoms\n", randomRescaled);
 	if(nBad > 0) printf("Found %lld insane events\n", nBad);

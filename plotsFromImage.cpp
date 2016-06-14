@@ -453,6 +453,12 @@ int main(int argc, char * argv[])
     peaks[1] = new TH2F("peaks1","peaks1",64,0,64,48,0,48);
     C_peak[0] = new TCanvas("Peaks0","Peaks0",1200,800);
     C_peak[1] = new TCanvas("Peaks1","Peaks1",1200,800);
+    //2d map of acquisition rates
+    peaks[0] = new TH2F("rate0","rate0",64,0,64,48,0,48);
+    peaks[1] = new TH2F("rate1","rate1",64,0,64,48,0,48);
+    C_peak[0] = new TCanvas("Rate0","Rate0",1200,800);
+    C_peak[1] = new TCanvas("Rate1","Rate1",1200,800);
+    
     //1d histo of the 511KeV peak position distribution
     peaks_distro[0] = new TH1F("peaks_distro0","peaks_distro0",200,300,700);
     peaks_distro[1] = new TH1F("peaks_distro1","peaks_distro1",200,300,700);

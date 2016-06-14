@@ -1,14 +1,21 @@
 {
   TFile *f = new TFile("compare.root", "RECREATE");
-  Int_t N = 3;
+  Int_t N = 7;
   std::string *fileNames = new std::string[N];
   std::string *date = new std::string[N];
 //   for(int n = 0 ; n < N ; n++)
 //   {
 //      fileNames[0] = "/data/acqmanager/calibration/resumes/2015-02-20_04:24:50.root";
-     fileNames[0] = "/data/acqmanager/calibration/resumes/2015-02-20_04:24:50.root";
-     fileNames[1] = "/data/acqmanager/calibration/resumes/2015-07-17_02:04:06.root";
-     fileNames[2] = "/data/acqmanager/calibration/resumes/2015-09-15_05:19:05.root";
+//      fileNames[0] = "/data/acqmanager/calibration/resumes/2015-02-20_04:24:50.root";
+//      fileNames[1] = "/data/acqmanager/calibration/resumes/2015-07-17_02:04:06.root";
+//      fileNames[2] = "/data/acqmanager/calibration/resumes/2015-09-15_05:19:05.root";
+    fileNames[0] = "/home/marco/Universita/ClearPEM/Monza/CalibrationReport/2014-05-19_13:18:24.root";
+    fileNames[1] = "/home/marco/Universita/ClearPEM/Monza/CalibrationReport/2015-02-20_04_24_50.root";
+    fileNames[2] = "/home/marco/Universita/ClearPEM/Monza/CalibrationReport/2015-07-17_02_04_06.root";
+    fileNames[3] = "/home/marco/Universita/ClearPEM/Monza/CalibrationReport/2016-03-21_16:02:36.root";
+    fileNames[4] = "/home/marco/Universita/ClearPEM/Monza/CalibrationReport/2016-05-18_16:33:10.root";
+    fileNames[5] = "/home/marco/Universita/ClearPEM/Monza/CalibrationReport/2016-06-01_10:49:35.root";
+    fileNames[6] = "/home/marco/Universita/ClearPEM/Monza/CalibrationReport/2016-06-06_18:07:19.root";
 //   }
   for (int n = 0 ; n < N ; n++)
   {

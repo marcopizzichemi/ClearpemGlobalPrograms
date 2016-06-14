@@ -1,6 +1,6 @@
 // small program to analyze the spectra 
 // compile with
-// g++ -o studyModule studyModule.cpp `root-config --cflags --glibs`
+// g++ -o ../build/studyModule studyModule.cpp `root-config --cflags --glibs`
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -97,8 +97,126 @@ int main(int argc, char * argv[])
 	}
       }
     }
-    TCanvas *multi = new TCanvas("MultiCanvas","MultiCanvas",3000,1500);
-    multi->Divide(userXmax-userXmin+1,userYmax-userYmin+1);
+    
+    
+    /*
+     *   
+     *   
+     *   TCanvas *multi[2][8][12];
+     *   for(int head = 0 ; head < 2 ; head++)
+     *   {
+     *     for(int iModule = 0; iModule < 8 ; iModule++)
+     *     {
+     * for(int jModule = 0 ; jModule < 12 ; jModule++)
+     * {
+     *  std::stringstream multiName;
+     *  multiName << "module_head" << head << "_x" << iModule*8 << "-" << (iModule+1)*8 - 1 << "_y" << (jModule)*4 << "-" << (jModule+1)*4 - 1 ;
+     *  multi[head][iModule][jModule] = new TCanvas(multiName.str().c_str(),multiName.str().c_str(),3000,1500);
+     *  multi[head][iModule][jModule]->Divide(8,4);
+     *  int canvascounter = 0;
+     *  for(int yCry = (jModule+1)*4 - 1; yCry >= (jModule)*4; yCry--) 
+     *  {
+     *    for(int xCry = (iModule+1)*8 - 1; xCry <= iModule*8; xCry++) 
+     *    {
+     *      canvascounter++;
+     *      spectraFile->cd();
+     *      spectraFile->cd(directories[head][xCry][yCry].c_str());
+     *      TGraphErrors *graph = (TGraphErrors*)gDirectory->Get("Graph");
+     *      
+     *      if(graph!=NULL)
+     *      {
+     *	// 	std::cout << xCry << " " << yCry << " " << graph->GetN() << std::endl;
+     *	multi[head][iModule][jModule]->cd(canvascounter);
+     *	std::stringstream title;
+     *	title << "head" << head << "_x" << xCry << "_y" << yCry ;
+     *	// 	graph->SetTitleW(2);
+     *	// 	graph->SetTitleH(2);
+     *	graph->SetTitle(title.str().c_str());
+     *	graph->SetMarkerStyle(21);
+     *	graph->SetMarkerSize(0.1);
+     *	graph->GetXaxis()->SetTitle("Time [s]");
+     *	graph->GetYaxis()->SetTitle("[KeV]");
+     *	graph->GetXaxis()->SetLabelSize(0.06);
+     *	graph->GetYaxis()->SetLabelSize(0.06);
+     *	graph->GetXaxis()->SetNdivisions(505);
+     *	graph->GetYaxis()->SetNdivisions(505);
+     *	graph->GetYaxis()->SetTitleSize(0.06);
+     *	graph->GetYaxis()->SetTitleOffset(1.4);
+     *	graph->GetXaxis()->SetTitleSize(0.06);
+     *	graph->GetXaxis()->SetTitleOffset(0.9);
+     *	graph->GetYaxis()->SetRangeUser(450,600);
+     *	graph->Draw("AP");
+  }
+  }
+  }
+  }
+  }
+  }*/
+    TCanvas *multi ;
+    std::stringstream multiName;
+    multiName << "module_head" << 0 << "_x" << 0*8 << "-" << (0+1)*8 - 1 << "_y" << (2)*4 << "-" << (2+1)*4 - 1 ;
+    multi/*[head][iModule][jModule]*/ = new TCanvas(multiName.str().c_str(),multiName.str().c_str(),3000,1500);
+    multi/*[head][iModule][jModule]*/->Divide(8,4);
+    
+    multi->Divide(8,4);
+    //     std::stringstream gifName;
+    //     gifName << multiName.str().c_str() << ".gif";
+    
+    for(int head = 0 ; head < 2 ; head++)
+    {
+      for(int iModule = 0; iModule < 8 ; iModule++)
+      {
+	for(int jModule = 0 ; jModule < 12 ; jModule++)
+	{
+	  if(head == 0 && iModule == 0 && jModule == 2)
+	  {
+// 	    std::stringstream multiName;
+// 	    multiName << "module_head" << head << "_x" << iModule*8 << "-" << (iModule+1)*8 - 1 << "_y" << (jModule)*4 << "-" << (jModule+1)*4 - 1 ;
+// 	    multi[head][iModule][jModule] = new TCanvas(multiName.str().c_str(),multiName.str().c_str(),3000,1500);
+// 	    multi[head][iModule][jModule]->Divide(8,4);
+	    int canvascounter = 0;
+	    for(int yCry = (jModule+1)*4 - 1; yCry >= (jModule)*4; yCry--) 
+	    {
+	      for(int xCry = (iModule+1)*8 - 1; xCry <= iModule*8; xCry++) 
+	      {
+		canvascounter++;
+		spectraFile->cd();
+		spectraFile->cd(directories[head][xCry][yCry].c_str());
+		TGraphErrors *graph = (TGraphErrors*)gDirectory->Get("Graph");
+		
+		if(graph!=NULL)
+		{
+		  // 	std::cout << xCry << " " << yCry << " " << graph->GetN() << std::endl;
+// 		  multi[head][iModule][jModule]->cd(canvascounter);
+		  std::stringstream title;
+		  title << "head" << head << "_x" << xCry << "_y" << yCry ;
+		  // 	graph->SetTitleW(2);
+		  // 	graph->SetTitleH(2);
+		  graph->SetTitle(title.str().c_str());
+		  graph->SetMarkerStyle(21);
+		  graph->SetMarkerSize(0.1);
+		  graph->GetXaxis()->SetTitle("Time [s]");
+		  graph->GetYaxis()->SetTitle("[KeV]");
+		  graph->GetXaxis()->SetLabelSize(0.06);
+		  graph->GetYaxis()->SetLabelSize(0.06);
+		  graph->GetXaxis()->SetNdivisions(505);
+		  graph->GetYaxis()->SetNdivisions(505);
+		  graph->GetYaxis()->SetTitleSize(0.06);
+		  graph->GetYaxis()->SetTitleOffset(1.4);
+		  graph->GetXaxis()->SetTitleSize(0.06);
+		  graph->GetXaxis()->SetTitleOffset(0.9);
+		  graph->GetYaxis()->SetRangeUser(450,600);
+		  graph->Draw("AP");
+		}
+	      }
+	    }
+	  }
+	}
+      }
+    }
+    
+    
+    
     
     //plot the 2d peak map of the chosen head and the zoomed map
     spectraFile->cd();
@@ -110,53 +228,21 @@ int main(int argc, char * argv[])
     TH2F *plot2d = (TH2F*)gDirectory->Get(aString.str().c_str());
     TCanvas *globalMap = new TCanvas((aString.str()+"_full").c_str(),(aString.str()+"_full").c_str(),1200,800);
     globalMap->cd();
-    plot2d->GetZaxis()->SetRangeUser(450, 600);
+    plot2d->GetZaxis()->SetRangeUser(500, 520);
     plot2d->Draw("COLZ");
     //   globalMap->Print((aString.str()+".gif").c_str());
     aString << "head" << userHead << "_x" << userXmin << "-"<< userXmax << "_y"<< userYmin << "-" << userYmax;
     TCanvas *zoomMap = new TCanvas((aString.str()+"_zoom").c_str(),(aString.str()+"_zoom").c_str(),1200,800);
     zoomMap->cd();
-    plot2d->GetXaxis()->SetRangeUser(userXmin, userXmax);
-    plot2d->GetYaxis()->SetRangeUser(userYmin, userYmax);
+    plot2d->GetXaxis()->SetRangeUser(userXmin, userXmax+2);
+    plot2d->GetYaxis()->SetRangeUser(userYmin, userYmax+2);
     plot2d->Draw("COLZ");
     //   zoomMap->Print((aString.str()+".gif").c_str());
     
-    int canvascounter = 0;
-    for(int yCry = userYmax; yCry > (userYmin-1); yCry--) 
-    {
-      for(int xCry = userXmin; xCry < userXmax+1; xCry++) 
-      {
-	canvascounter++;
-	spectraFile->cd();
-	spectraFile->cd(directories[userHead][xCry][yCry].c_str());
-	TGraphErrors *graph = (TGraphErrors*)gDirectory->Get("Graph");
-	
-	if(graph!=NULL)
-	{
-	  // 	std::cout << xCry << " " << yCry << " " << graph->GetN() << std::endl;
-	  multi->cd(canvascounter);
-	  std::stringstream title;
-	  title << "head" << userHead << "_x" << xCry << "_y" << yCry ;
-	  // 	graph->SetTitleW(2);
-	  // 	graph->SetTitleH(2);
-	  graph->SetTitle(title.str().c_str());
-	  graph->SetMarkerStyle(21);
-	  graph->SetMarkerSize(0.1);
-	  graph->GetXaxis()->SetTitle("Time [s]");
-	  graph->GetYaxis()->SetTitle("[KeV]");
-	  graph->GetXaxis()->SetLabelSize(0.06);
-	  graph->GetYaxis()->SetLabelSize(0.06);
-	  graph->GetXaxis()->SetNdivisions(505);
-	  graph->GetYaxis()->SetNdivisions(505);
-	  graph->GetYaxis()->SetTitleSize(0.06);
-	  graph->GetYaxis()->SetTitleOffset(1.4);
-	  graph->GetXaxis()->SetTitleSize(0.06);
-	  graph->GetXaxis()->SetTitleOffset(0.9);
-	  graph->GetYaxis()->SetRangeUser(450,600);
-	  graph->Draw("AP");
-	}
-      }
-    }
+    TH2F *plot2d_last[2];
+    TCanvas *C_plot2d_last[2];
+    plot2d_last[0] = new TH2F("last0","last0",64,0,64,48,0,48);
+    plot2d_last[1] = new TH2F("last1","last1",64,0,64,48,0,48);
     
     
     // all the graphs should have the same number of points, so check the first one 
@@ -180,7 +266,7 @@ int main(int argc, char * argv[])
     // construct graphs and maps accordingly
     // crystals out of window
     int *outCry[2];
-    double *sigmaTime[2];
+    //     double *sigmaTime[2];
     
     TH2F **outMap[2];
     TCanvas **C_outMap[2];
@@ -188,27 +274,27 @@ int main(int argc, char * argv[])
     for(int i = 0; i < 2 ; i++) 
     {
       outCry[i] = new int[Npoints];
-      sigmaTime[i] = new double[Npoints];
+      //       sigmaTime[i] = new double[Npoints];
       
-      outMap[i] = new TH2F*[Npoints];
-      C_outMap[i] = new TCanvas*[Npoints];
+      //       outMap[i] = new TH2F*[Npoints];
+      //       C_outMap[i] = new TCanvas*[Npoints];
       for (int j = 0; j < Npoints ; j++)
       {
-	std::stringstream mapName;
-	if(j==0)
-	  mapName << "Head " << i  << " - Channels out of "<< Emin << "-"<< Emax << "Kev - 0 to " << xvect[i][j] << " sec ";
-	else
-          mapName << "Head " << i  << " - Channels out of "<< Emin << "-"<< Emax << "Kev - " << xvect[i][j-1] <<" to " << xvect[i][j] << " sec ";
-	outMap[i][j] = new TH2F(mapName.str().c_str(),mapName.str().c_str(),64,0,64,48,0,48);
-	mapName.str();
-	if(j==0)
-	  mapName << "C_Head " << i  << " - Channels out of "<< Emin << "-"<< Emax << "Kev - 0 to " << xvect[i][j] << " sec ";
-	else
-          mapName << "C_Head " << i  << " - Channels out of "<< Emin << "-"<< Emax << "Kev - " << xvect[i][j-1] <<" to " << xvect[i][j] << " sec ";
-	C_outMap[i][j] = new TCanvas(mapName.str().c_str(),mapName.str().c_str(),1200,800);
-// 	xvect[i][j] = 0;
+	// 	std::stringstream mapName;
+	// 	if(j==0)
+	// 	  mapName << "Head " << i  << " - Channels out of "<< Emin << "-"<< Emax << "Kev - 0 to " << xvect[i][j] << " sec ";
+	// 	else
+	//           mapName << "Head " << i  << " - Channels out of "<< Emin << "-"<< Emax << "Kev - " << xvect[i][j-1] <<" to " << xvect[i][j] << " sec ";
+	// 	outMap[i][j] = new TH2F(mapName.str().c_str(),mapName.str().c_str(),64,0,64,48,0,48);
+	// 	mapName.str();
+	// 	if(j==0)
+	// 	  mapName << "C_Head " << i  << " - Channels out of "<< Emin << "-"<< Emax << "Kev - 0 to " << xvect[i][j] << " sec ";
+	// 	else
+	//           mapName << "C_Head " << i  << " - Channels out of "<< Emin << "-"<< Emax << "Kev - " << xvect[i][j-1] <<" to " << xvect[i][j] << " sec ";
+	// 	C_outMap[i][j] = new TCanvas(mapName.str().c_str(),mapName.str().c_str(),1200,800);
+	// 	xvect[i][j] = 0;
 	outCry[i][j] = 0;
-	sigmaTime[i][j] = 0;
+	// 	sigmaTime[i][j] = 0;
       }
     }
     
@@ -222,7 +308,7 @@ int main(int argc, char * argv[])
 	{
 	  //feedback to the user 
 	  std::cout << "Head " << std::setw(2) <<  head << "/1" << "\t" << "x " << std::setw(2) << xCry << "/63" << "\t\t" << "y " << std::setw(2) << yCry << "/47"/*<< "\t" << " Subplot " << k*/;
-	  std::cout << "\n";
+	  std::cout << "\r";
 	  spectraFile->cd();
 	  spectraFile->cd(directories[head][xCry][yCry].c_str());
 	  TGraphErrors *graph = (TGraphErrors*)gDirectory->Get("Graph");
@@ -234,36 +320,52 @@ int main(int argc, char * argv[])
 	      graph->GetPoint(t,x,y);
 	      if(y > 0 && (y < Emin | y > Emax))
 	      {
-		outMap[head][t]->Fill(xCry,yCry,1);
+		// 		outMap[head][t]->Fill(xCry,yCry,1);
 		outCry[head][t]++;
-// 		xvect[head][t] = x;
+		// 		xvect[head][t] = x;
 	      }
 	      else
 	      {
-		outMap[head][t]->Fill(xCry,yCry,0);
+		// 		outMap[head][t]->Fill(xCry,yCry,0);
 	      }
+	      if(t == graph->GetN() - 2)
+	      {
+		plot2d_last[head]->Fill(xCry,yCry,y);
+	      }
+	      
 	    }
-	    
-	    
-	    
 	  }
 	}
       }
     }
-    for(int i = 0; i < 2 ; i++) 
+    
+    for(int head = 0; head < 2; head++)
     {
-      for (int j = 0; j < Npoints ; j++)
-      {
-	std::stringstream gifName;
-	gifName << "Head" << i << "_t" << j<< ".gif";
-	C_outMap[i][j]->cd();
-	outMap[i][j]->GetXaxis()->SetTitle("X");
-	outMap[i][j]->GetYaxis()->SetTitle("Y");
-	outMap[i][j]->Draw("COLZ");
-// 	C_outMap[i][j]->Print(gifName.str().c_str());
-      }
+      std::stringstream title;
+      title << "Head" << head << " - Peak position after 64 hours ";
+      C_plot2d_last[head] = new TCanvas(title.str().c_str(),title.str().c_str(),1200,800);
+      C_plot2d_last[head]->cd();
+      //       plot2d_last[head]->GetXaxis()->SetTitle("x");
+      //       plot2d_last[head]->GetYaxis()->SetTitle("y");
+      plot2d_last[head]->GetZaxis()->SetRangeUser(500,520);
+      plot2d_last[head]->GetZaxis()->SetTitle(title.str().c_str());
+      plot2d_last[head]->Draw("COLZ");
     }
-   
+    
+    //     for(int i = 0; i < 2 ; i++) 
+    //     {
+    //       for (int j = 0; j < Npoints ; j++)
+    //       {
+    // 	std::stringstream gifName;
+    // 	gifName << "Head" << i << "_t" << j<< ".gif";
+    // 	C_outMap[i][j]->cd();
+    // 	outMap[i][j]->GetXaxis()->SetTitle("X");
+    // 	outMap[i][j]->GetYaxis()->SetTitle("Y");
+    // 	outMap[i][j]->Draw("COLZ");
+    // // 	C_outMap[i][j]->Print(gifName.str().c_str());
+    //       }
+    //     }
+    
     TGraph *inTime[2];
     TCanvas *C_inTime[2];
     for(int head = 0; head < 2; head++)
@@ -280,41 +382,56 @@ int main(int argc, char * argv[])
       inTime[head]->Draw("AP");
     }
     
-
+    
+    
     
     std::stringstream title;
     title << "module_head" << userHead << "_x" << userXmin << "-"<< userXmax << "_y"<< userYmin << "-" << userYmax ;
     
-    //   multi->Print((title.str()+".gif").c_str());
+    //     multi->Print(gifName.str().c_str());
+    
+    
     TFile *multiFile = new TFile((title.str()+".root").c_str(),"RECREATE");
     multiFile->cd();
     plot2d->GetXaxis()->SetRangeUser(0, 64);
     plot2d->GetYaxis()->SetRangeUser(0, 48);
     globalMap->Write();
     
-
-    plot2d->GetXaxis()->SetRangeUser(userXmin, userXmax);
-    plot2d->GetYaxis()->SetRangeUser(userYmin, userYmax);
-    zoomMap->Write();
+    
+    //     plot2d->GetXaxis()->SetRangeUser(userXmin, userXmax+1);
+    //     plot2d->GetYaxis()->SetRangeUser(userYmin, userYmax+1);
+    //     zoomMap->Write();
     
     C_inTime[0]->Write();
     C_inTime[1]->Write();
-    inTime[0]->Write();
-    inTime[1]->Write();
+    C_plot2d_last[0]->Write();
+    C_plot2d_last[1]->Write();
     
-    for(int i = 0; i < 2 ; i++) 
-    {
-      for (int j = 0; j < Npoints ; j++)
-      {
-	C_outMap[i][j]->Write();
-      }
-    }
-
+    //     for(int i = 0; i < 2 ; i++) 
+    //     {
+    //       for (int j = 0; j < Npoints ; j++)
+    //       {
+    // 	C_outMap[i][j]->Write();
+    //       }
+    //     }
+    
+    
+    
+//     for(int head = 0 ; head < 2 ; head++)
+//     {
+//       for(int iModule = 0; iModule < 8 ; iModule++)
+//       {
+// 	for(int jModule = 0 ; jModule < 12 ; jModule++)
+// 	{
+// 	  multi[head][iModule][jModule]->Write();
+// 	}
+//       }
+//     }
     multi->Write();
-//     spectraFile->Close();
+    spectraFile->Close();
     multiFile->Close();
-
+    
     return 0;
-
+    
   }
 }
