@@ -66,14 +66,41 @@ int main(int argc, char * argv[])
     double totalTime = 0;
     double t0 = -1;
     long long int nEvents = 0;
-    
+    float angleFound = 0;
     EventFormat fe;
     while(fread((void*)&fe, sizeof(fe), 1, fIn) == 1) 
     {
+      if(nEvents == 0)
+      {
+	angleFound = fe.yozRot;
+// 	angleNum++;
+	printf("\nFound angle [rad] = %f\nDistance = %f\nTime = %f\n",angleFound,fe.d,fe.ts);
+	//create the string for the output file
+//         std::stringstream OutStringStream;
+//         OutStringStream << "angle_" << angleNum <<  "_" << angleFound << ".elm2";
+//         CurrentOutput = new std::ofstream(OutStringStream.str().c_str(), std::ios::binary);
+//         output_file.push_back(&CurrentOutput);
+      }
+      else if(angleFound != fe.yozRot)
+      {
+// 	CurrentOutput->close();
+	angleFound = fe.yozRot;
+// 	angleNum++;
+	printf("\nFound angle [rad] = %f\nDistance = %f\nTime = %f\n",angleFound,fe.d,fe.ts);
+	//create the string for the output file
+//        std::stringstream OutStringStream;
+//        OutStringStream << "angle_" << angleNum << "_" << angleFound << ".elm2";
+//        CurrentOutput = new std::ofstream(OutStringStream.str().c_str(), std::ios::binary);
+//        output_file.push_back(&CurrentOutput);
+      }
+            
       nEvents++;
       if(t0 == -1)
 	t0 = fe.ts;
       totalTime = fe.ts - t0;
+      
+      
+      
       
       if( (nEvents % 10000) == 0 )
       {
@@ -87,6 +114,8 @@ int main(int argc, char * argv[])
     std::cout << "------------------------" << std::endl;
     std::cout << "File \t" << argv[i] << std::endl;
     std::cout << "nEvents =\t" << nEvents << std::endl;
+    std::cout << "Start Time =\t" << t0 << std::endl;
+    std::cout << "Stop Time =\t" << fe.ts << std::endl;
     std::cout << "totalTime =\t" << totalTime << std::endl;
     std::cout << "------------------------" << std::endl;
     std::cout << std::endl;
